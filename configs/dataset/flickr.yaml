@@ -1,0 +1,4 @@
+image_path: "data/flickr/images"
+annotation: "data/flickr/results.csv"
+data_dir: "data/flickr"
+batch_size: 32
