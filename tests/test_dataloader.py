@@ -2,11 +2,12 @@ import os
 import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+import hydra
 import pytest
 from torch.utils.data import DataLoader
-from omegaconf import OmegaConf
-import hydra
-from src.dataloader import Flicker30K, create_transform
+
+from src.dataloader import Flicker30K
+from src.dataloader import create_transform
 
 
 @pytest.fixture
@@ -14,9 +15,6 @@ def dataloader():
     config_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../configs"))
     with hydra.initialize_config_dir(config_dir=config_dir, version_base="1.1"):
         cfg = hydra.compose(config_name="config.yaml")
-        print("=" * 50, "config", "=" * 50)
-        print(cfg)
-        print("=" * 50, "", "=" * 50)
     transform = create_transform()
     dataset = Flicker30K(
         data_dir=cfg.dataset.data_dir,

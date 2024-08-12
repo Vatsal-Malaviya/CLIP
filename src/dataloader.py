@@ -1,6 +1,7 @@
+import os
+
 import pandas as pd
 from PIL import Image
-import os
 from torch.utils.data import Dataset
 from torchvision import transforms
 

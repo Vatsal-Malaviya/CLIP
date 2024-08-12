@@ -1,7 +1,8 @@
-import pytest
-import torch
 import os
 import sys
+
+import pytest
+import torch
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
 from src.models import VisionTransformer
