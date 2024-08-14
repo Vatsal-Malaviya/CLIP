@@ -6,10 +6,10 @@ import torch
 from transformers import BertTokenizer
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-from src.models import CLIP
-from src.models import ProjectionHead
-from src.models import TextTransformer
-from src.models import VisionTransformer
+from src.clip import CLIP
+from src.clip import ProjectionHead
+from src.clip import TextTransformer
+from src.clip import VisionTransformer
 
 
 @pytest.fixture
