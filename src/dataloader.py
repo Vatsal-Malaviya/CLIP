@@ -1,24 +1,40 @@
 import os
+from typing import Any
+from typing import Callable
+from typing import Dict
+from typing import Optional
 
 import pandas as pd
+from omegaconf import DictConfig
 from PIL import Image
 from torch.utils.data import Dataset
 from torchvision import transforms
 
 
-class Flicker30K(Dataset):
-    def __init__(self, data_dir, annotation, transform=None):
+class Flickr30K(Dataset):
+    """
+    PyTorch Dataset for the Flickr30K dataset.
+
+    Args:
+        data_dir (str): Directory where the images are stored.
+        annotation_file (str): Path to the annotation file (CSV) containing image file
+            names and captions.
+        transform (Optional[Callable]): Optional transform to be applied on a sample.
+    """
+
+    def __init__(
+        self, data_dir: str, annotation_file: str, transform: Optional[Callable] = None
+    ) -> None:
         self.data_dir = data_dir
-        self.data = pd.read_csv(annotation, sep="|")
+        self.data = pd.read_csv(annotation_file, sep="|")
         self.transform = transform
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.data)
 
-    def __getitem__(self, idx):
-        image = Image.open(
-            os.path.join(self.data_dir, "images", self.data.iloc[idx, 0])
-        ).convert("RGB")
+    def __getitem__(self, idx: int) -> Dict[str, Any]:
+        image_path = os.path.join(self.data_dir, "images", self.data.iloc[idx, 0])
+        image = Image.open(image_path).convert("RGB")
         caption = self.data.iloc[idx, 1]
 
         if self.transform:
@@ -27,11 +43,25 @@ class Flicker30K(Dataset):
         return {"image": image, "caption": caption}
 
 
-def create_transform():
+def create_transform(cfg: DictConfig) -> Callable:
+    """
+    Creates a transform pipeline for the images.
+
+    Args:
+        resize (tuple): Size to which images will be resized (height, width).
+        mean (tuple): Mean for normalization.
+        std (tuple): Standard deviation for normalization.
+
+    Returns:
+        Callable: Transform pipeline.
+    """
     return transforms.Compose(
         [
-            transforms.Resize((224, 224)),
+            transforms.Resize(cfg.image_encoder.transform.resize),
             transforms.ToTensor(),
-            transforms.Normalize(mean=[0.485, 0.456, 0.406], std=[0.229, 0.224, 0.225]),
+            transforms.Normalize(
+                mean=cfg.image_encoder.transform.mean,
+                std=cfg.image_encoder.transform.std,
+            ),
         ]
     )

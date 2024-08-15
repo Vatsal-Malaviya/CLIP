@@ -1,10 +1,25 @@
 defaults:
   - _self_
   - dataset: flickr
+  - text_encoder: bert-base
+  - image_encoder: vit
 
+# General training configurations
 embedding_dim: 256
 projection_dim: 256
 dropout: 0.1
 batch_size: 32
 learning_rate: 1e-4
 num_epochs: 10
+
+# Reference to sub-configurations for specific components
+dataset:
+  ${dataset}
+
+text_encoder:
+  ${text_encoder}
+
+image_encoder:
+  ${image_encoder}
+
+training:

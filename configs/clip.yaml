@@ -1,0 +1,10 @@
+defaults:
+- image_encoder: vit
+- text_encoder: bert-large
+
+projection_dim: 256  # Dimension to project both image and text embeddings
+
+training:
+  epochs: 10
+  batch_size: 32
+  learning_rate: 0.0001

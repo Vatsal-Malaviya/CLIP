@@ -2,11 +2,12 @@ import os
 import sys
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
+
 import hydra
 import pytest
 from torch.utils.data import DataLoader
 
-from src.dataloader import Flicker30K
+from src.dataloader import Flickr30K
 from src.dataloader import create_transform
 
 
@@ -15,10 +16,10 @@ def dataloader():
     config_dir = os.path.abspath(os.path.join(os.path.dirname(__file__), "../configs"))
     with hydra.initialize_config_dir(config_dir=config_dir, version_base="1.1"):
         cfg = hydra.compose(config_name="config.yaml")
-    transform = create_transform()
-    dataset = Flicker30K(
+    transform = create_transform(cfg)
+    dataset = Flickr30K(
         data_dir=cfg.dataset.data_dir,
-        annotation=cfg.dataset.annotation,
+        annotation_file=cfg.dataset.annotation_file,
         transform=transform,
     )
     return cfg, DataLoader(dataset, batch_size=cfg.dataset.batch_size, shuffle=True)
