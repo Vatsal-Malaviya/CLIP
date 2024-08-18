@@ -1,10 +1,12 @@
 defaults:
 - image_encoder: vit
 - text_encoder: bert-large
+- dataset: flickr
 
 projection_dim: 256  # Dimension to project both image and text embeddings
 
 training:
-  epochs: 10
-  batch_size: 32
-  learning_rate: 0.0001
+  epochs: 2
+  batch_size: 64
+  learning_rate: 0.001
+  temperature: 0.1
