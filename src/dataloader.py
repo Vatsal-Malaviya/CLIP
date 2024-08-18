@@ -26,7 +26,7 @@ class Flickr30K(Dataset):
         self, data_dir: str, annotation_file: str, transform: Optional[Callable] = None
     ) -> None:
         self.data_dir = data_dir
-        self.data = pd.read_csv(annotation_file, sep="|")
+        self.data = pd.read_csv(annotation_file, sep="|", dtype=str)
         self.transform = transform
 
     def __len__(self) -> int:
@@ -35,7 +35,7 @@ class Flickr30K(Dataset):
     def __getitem__(self, idx: int) -> Dict[str, Any]:
         image_path = os.path.join(self.data_dir, "images", self.data.iloc[idx, 0])
         image = Image.open(image_path).convert("RGB")
-        caption = self.data.iloc[idx, 1]
+        caption = self.data["comment"].iloc[idx]
 
         if self.transform:
             image = self.transform(image)
